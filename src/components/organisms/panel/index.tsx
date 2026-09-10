@@ -1,0 +1,262 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+import { tailwind } from '#/utils/tailwind';
+import { observer } from 'mobx-react-lite';
+
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+
+import { Icon } from '#/components/atoms/icon';
+
+import { panels } from '#/components/organisms/panels/panels';
+import { useExtensions, useOutsideClick, useMediaQuery } from '#/hooks';
+import { command, actions } from '#/lib/command';
+
+import { PanelsEnumType, PanelSide } from '#/types';
+
+type PanelContextState = {
+  isOpen: boolean;
+  side: PanelSide;
+  panel?: PanelsEnumType;
+};
+
+const PanelContext = createContext<PanelContextState>({} as PanelContextState);
+
+type PanelProviderProps = {
+  side: PanelSide;
+  initialPanel?: PanelsEnumType;
+};
+
+function usePanel() {
+  const context = useContext(PanelContext);
+
+  if (!context)
+    throw Error(
+      'You need to be inside the PanelContext component to use the usePanel hook.'
+    );
+
+  return context;
+}
+
+function PanelProvider(props: React.PropsWithChildren<PanelProviderProps>) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [panel, setPanel] = useState<PanelsEnumType | undefined>(
+    props.initialPanel
+  );
+
+  async function onShowPanel(panel: PanelsEnumType) {
+    setPanel(panel);
+    setIsOpen(true);
+  }
+
+  async function onClearPanel() {
+    setPanel(undefined);
+  }
+
+  async function onOpenPanel() {
+    setIsOpen(true);
+  }
+
+  async function onClosePanel() {
+    setIsOpen(false);
+  }
+
+  useEffect(() => {
+    const disposes = [
+      command.handle(`panel.${props.side}.show`, onShowPanel),
+      command.handle(`panel.${props.side}.clear`, onClearPanel),
+      command.handle(`panel.${props.side}.open`, onOpenPanel),
+      command.handle(`panel.${props.side}.close`, onClosePanel),
+    ];
+
+    return () => {
+      disposes.forEach(dispose => dispose());
+    };
+  }, []);
+
+  return (
+    <PanelContext.Provider
+      value={{
+        side: props.side,
+        panel,
+        isOpen,
+      }}
+      {...props}
+    />
+  );
+}
+
+function PanelContainer(props: React.PropsWithChildren) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const breakpoint = useMemo(() => {
+    return tailwind.getToken('--breakpoint-laptop', { fallbackReturn: '0px' });
+  }, []);
+
+  const [isLessThanLaptop] = useMediaQuery(`(max-width: ${breakpoint})`);
+
+  const { isOpen, side } = usePanel();
+
+  useOutsideClick(
+    containerRef,
+    () => {
+      actions.panel[side].close();
+    },
+    isLessThanLaptop && isOpen
+  );
+
+  return (
+    <div
+      className={tailwind.cn(
+        'w-0 max-w-0 h-full relative laptop:w-full laptop:max-w-panel'
+      )}
+      ref={containerRef}
+      {...props}
+      data-testid="panel"
+    />
+  );
+}
+
+function PanelWrapper(props: React.PropsWithChildren) {
+  const { isOpen, side } = usePanel();
+
+  return (
+    <div
+      className={tailwind.cn(
+        `absolute top-0 w-panel h-full bg-palette-base p-md rounded-md box-border z-10 laptop:shadow-none`,
+        side === 'left' ? 'left-0' : 'right-0',
+        isOpen
+          ? `shadow-panel-${side}`
+          : 'max-laptop:border-none max-laptop:-z-10 max-laptop:shadow-none'
+      )}
+      {...props}
+      data-testid={`panel-wrapper-${side}`}
+    />
+  );
+}
+
+function PanelContent(props: React.PropsWithChildren) {
+  const { isOpen, side } = usePanel();
+
+  return (
+    <div
+      className={tailwind.cn(
+        'w-full h-full flex flex-col',
+        !isOpen && 'max-laptop:opacity-0 max-laptop:overflow-hidden'
+      )}
+      {...props}
+      data-testid={`panel-content-${side}`}
+    />
+  );
+}
+
+const Scrollable = tailwind.twx
+  .div`h-full w-[calc(100%+(var(--spacing-md)*2))] -ml-md pl-md pr-xs overflow-y-scroll scrollbar`;
+
+const PanelRender = observer(function PanelRender() {
+  const { panel } = usePanel();
+  const extensionsStore = useExtensions();
+
+  const allPanels = useMemo(
+    () => ({
+      ...panels,
+      ...(extensionsStore.extensions.panels ?? {}),
+    }),
+    [extensionsStore.extensions]
+  );
+
+  const Panel = (allPanels[panel!] || React.Fragment) as React.ComponentType;
+
+  return <Panel />;
+});
+
+const percentageMap = {
+  left: '70%',
+  right: '-70%',
+};
+
+function PanelToggle() {
+  const { side, isOpen } = usePanel();
+  const t = useTranslations('ui.panel');
+
+  const percentage = percentageMap[side];
+  const isLeft = side === 'left';
+
+  function togglePanel() {
+    const method = isOpen ? 'close' : 'open';
+
+    actions.panel[side][method]();
+  }
+
+  function getBorderClasses() {
+    if (isLeft) return 'pr-0 border-r-0! rounded-tr-none! rounded-br-none!';
+
+    return 'pl-0 border-l-0! rounded-tl-none! rounded-bl-none!';
+  }
+
+  function getPositionClasses() {
+    if (isOpen) return isLeft ? '-right-panel' : '-left-panel';
+
+    return isLeft ? '-right-1.25' : '-left-1.25';
+  }
+
+  return (
+    <button
+      onClick={togglePanel}
+      aria-label={t('toggle', { side })}
+      data-testid={`panel-toggle-${side}`}
+      style={{
+        transform: isOpen ? `translateX(${percentage})` : 'rotate(180deg)',
+      }}
+      className={tailwind.cn(
+        'absolute grid place-items-center top-md bg-palette-base! box-border rounded-md p-[calc(var(--spacing-xs)/2)] z-20 laptop:hidden',
+
+        getPositionClasses(),
+        !isOpen && getBorderClasses()
+      )}
+    >
+      <Icon name={`chevron-${side}`} size={24} className="cursor-pointer!" />
+    </button>
+  );
+}
+
+type FullPanelTemplateProps = PanelProviderProps;
+
+function FullPanelTemplate(props: FullPanelTemplateProps) {
+  return (
+    <PanelProvider {...props}>
+      <PanelContainer>
+        <PanelToggle />
+
+        <PanelWrapper>
+          <PanelContent>
+            <PanelRender />
+          </PanelContent>
+        </PanelWrapper>
+      </PanelContainer>
+    </PanelProvider>
+  );
+}
+
+export const Panel = {
+  Template: {
+    Full: FullPanelTemplate,
+  },
+
+  Provider: PanelProvider,
+
+  Container: PanelContainer,
+  Wrapper: PanelWrapper,
+  Content: PanelContent,
+  Scrollable,
+
+  Render: PanelRender,
+  Toggle: PanelToggle,
+};

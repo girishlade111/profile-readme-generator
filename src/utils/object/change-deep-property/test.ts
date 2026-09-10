@@ -1,0 +1,79 @@
+import { getDeepProperty } from '..';
+import { changeDeepProperty } from '.';
+import { describe, it, expect } from 'vitest';
+
+describe('UTILS - Deep change object property', () => {
+  const objInput = {
+    prop1: 'some1',
+    prop2: 'some2',
+    prop3: 'some3',
+    prop4: {
+      key1: 'some1',
+      key2: 'some2',
+      key3: {
+        prop1: 'some1',
+        prop2: 'some2',
+        prop3: 'some3',
+      },
+    },
+  };
+
+  it('should return the value that is passed as an argument', () => {
+    const inputs = [
+      {
+        path: 'prop1',
+        value: 'some1',
+      },
+      {
+        path: 'prop4.key1',
+        value: 'some1',
+      },
+      {
+        path: 'prop4.key3.prop3',
+        value: 'some3',
+      },
+      {
+        path: 'prop2',
+        value: undefined,
+      },
+    ];
+
+    inputs.forEach(input => {
+      const { path, value } = input;
+
+      const newObject = changeDeepProperty({
+        obj: objInput,
+        path,
+        value,
+      });
+
+      const result = getDeepProperty(newObject, path);
+
+      expect(result).toStrictEqual(value);
+    });
+  });
+
+  it('should create the path when passing a nonexistent object path', () => {
+    const inputs = ['wrong.path', 'prop1.wrong.path', 'prop4.key1.wrong.path'];
+    const value = 'some';
+
+    const fn = (path: string) =>
+      changeDeepProperty({ obj: objInput, path, value });
+
+    inputs.forEach(path => {
+      const finded = getDeepProperty(fn(path), path);
+
+      expect(finded).toBe(value);
+    });
+  });
+
+  it('should throw when the root is not an object', () => {
+    expect(() =>
+      changeDeepProperty({
+        obj: 'not an object' as any,
+        path: 'a',
+        value: 'x',
+      })
+    ).toThrow('changeDeepProperty Error: path "a" don\'t exist in object');
+  });
+});

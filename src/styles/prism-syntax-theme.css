@@ -1,0 +1,55 @@
+.token.punctuation {
+  color: var(--palette-base);
+}
+
+.token.boolean,
+.token.constant,
+.token.deleted,
+.token.number,
+.token.property,
+.token.symbol,
+.token.tag {
+  color: var(--palette-base);
+}
+
+.token.attr-name,
+.token.builtin,
+.token.char,
+.token.inserted,
+.token.selector,
+.token.string {
+  color: var(--palette-accent);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: var(--palette-line);
+}
+
+.token.bold,
+.token.important {
+  font-weight: 700;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+.code code,
+.code pre {
+  width: 100%;
+  color: var(--palette-contrast);
+}
+
+.code code {
+  white-space: pre;
+}
+
+.code pre {
+  background: transparent;
+}

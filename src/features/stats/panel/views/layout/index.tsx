@@ -1,0 +1,62 @@
+'use client';
+
+import { object } from '#/utils/object';
+import { observer } from 'mobx-react-lite';
+
+import { AnimatePresence, Reorder } from 'framer-motion';
+import { GroupFields } from '#/components/organisms/group-fields';
+
+import { useCanvas, useForceUpdate } from '#/hooks';
+
+import { actions } from '#/lib/command';
+import { Item } from './item';
+
+import { groups } from './fields';
+
+type Stats = {
+  [key: string]: Stats;
+};
+
+export const Layout = observer(function Layout() {
+  const forceUpdate = useForceUpdate();
+  const canvasStore = useCanvas();
+
+  const selectedStats = object.deep.get<Stats | undefined>(
+    canvasStore.$currentSection,
+    'props.content.graphs'
+  );
+
+  const stats = selectedStats ? Object.entries(selectedStats) : [];
+  const stats_types = stats.map(tech => tech[0]);
+
+  function onReorder(order: typeof stats_types) {
+    const path = 'content.graphs';
+
+    const value = order.reduce((obj, name) => {
+      const found = stats.find(stat => stat[0] === name)!;
+
+      obj[found[0]] = found[1];
+
+      return obj;
+    }, {} as Stats);
+
+    actions.canvas.section.edit({ path, value });
+    setTimeout(forceUpdate, 200);
+  }
+
+  return (
+    <div>
+      {groups.map(group => (
+        <GroupFields key={group.id} {...group} />
+      ))}
+
+      <AnimatePresence>
+        <Reorder.Group axis="y" values={stats_types} onReorder={onReorder}>
+          {stats.map(([stats, props]) => (
+            <Item key={stats} stats={stats} isShowing={!!props.show} />
+          ))}
+        </Reorder.Group>
+      </AnimatePresence>
+    </div>
+  );
+});

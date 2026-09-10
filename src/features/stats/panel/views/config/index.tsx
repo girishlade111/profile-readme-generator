@@ -1,0 +1,52 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
+import { useMemo, useState } from 'react';
+
+import { useSearchParams } from 'next/navigation';
+import { AnimatePresence } from 'framer-motion';
+
+import { Fields } from '#/components/molecules/fields';
+import { useTranslateField } from '#/hooks';
+
+import { views } from './views';
+
+type Views = keyof typeof views;
+
+const Config = () => {
+  const t = useTranslations('ui');
+  const translate = useTranslateField();
+  const searchParams = useSearchParams();
+  const viewNames = useMemo(() => Object.keys(views), []);
+
+  const view = searchParams.get('config-view') ?? '';
+  const hasMatch = viewNames.includes(view);
+  const initialView = hasMatch ? view : viewNames[0];
+
+  const [currentTab, setCurrentTab] = useState(initialView);
+
+  const View = views[currentTab as Views];
+
+  return (
+    <>
+      <Fields.Compound.Combobox
+        label={t('stats-config.label')}
+        defaultValue={currentTab}
+        onChange={option => setCurrentTab(option.value)}
+        options={viewNames.map(view => ({
+          label: translate(view),
+          value: view,
+        }))}
+      />
+
+      <div className="flex flex-col mt-md">
+        <AnimatePresence>
+          <View />
+        </AnimatePresence>
+      </div>
+    </>
+  );
+};
+
+export { Config };

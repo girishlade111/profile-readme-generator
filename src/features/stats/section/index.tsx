@@ -1,0 +1,90 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+import { object } from '#/utils/object';
+import { url } from '#/utils/url';
+import { observer } from 'mobx-react-lite';
+
+import { GuardSection } from '#/components/organisms/sections/guard';
+
+import { useSettings } from '#/hooks';
+
+type Obj = Record<string, unknown>;
+type Graphs = Parameters<typeof url.getStats>[0];
+
+type Content = {
+  graphs: {
+    [key in Graphs]: Obj;
+  };
+};
+
+type SectionStyles = {
+  align: 'left' | 'center' | 'right';
+  direction: 'row' | 'column';
+};
+
+type StatsSectionProps = {
+  id: string;
+  content: Content;
+  styles: SectionStyles;
+};
+
+const mapProperties = {
+  left: 'start',
+  right: 'end',
+  center: 'center',
+};
+
+export const StatsSection = observer(function StatsSection(
+  props: StatsSectionProps
+) {
+  const { id, content, styles: containerStyles } = props;
+  const settingsStore = useSettings();
+  const t = useTranslations('ui.alts');
+
+  const { graphs } = content;
+  const { github } = settingsStore.$settings.user;
+
+  function getStyles() {
+    if (containerStyles.direction === 'column') {
+      return {
+        alignContent: mapProperties[containerStyles.align],
+      };
+    }
+
+    return {
+      justifyContent: containerStyles.align,
+    };
+  }
+
+  return (
+    <GuardSection sectionId={id}>
+      <div
+        className="flex flex-wrap gap-xs"
+        style={{
+          flexDirection: containerStyles.direction,
+          ...getStyles(),
+        }}
+      >
+        {(Object.entries(graphs) as [Graphs, Obj][]).map(([graph, props]) => {
+          const srcUrl = url.getStats(graph as Graphs, github!);
+
+          const { height = '', show = false, ...rest } = { ...props };
+          if (!graph || !show) return null;
+
+          const fullUrl = `${srcUrl}&${object.toQueryParams(rest as Obj)}`;
+
+          return (
+            <img
+              height={Number(height || 150)}
+              key={graph}
+              src={fullUrl}
+              alt={t('graph', { graph })}
+              className="max-w-full"
+            />
+          );
+        })}
+      </div>
+    </GuardSection>
+  );
+});
