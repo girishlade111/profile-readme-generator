@@ -1,170 +1,93 @@
-<div align="center" id="top">
-  <img src="https://profile-readme-generator.com/assets/app.png" width="900" alt="Profile Readme Generator" />
-
-  <a href="https://profile-readme-generator.com">Demo</a>
-</div>
-
 <div align="center">
   <h1>Profile Readme Generator</h1>
   <h3>The best profile readme generator you will find!</h3>
+  <p>
+    <a href="https://profile-readme-generator.com">Live Demo</a>
+  </p>
 </div>
 
-<p align="center">
-  <a href="https://github.com/maurodesouza/profile-readme-generator/fork" target="_blank">
-    <img src="https://img.shields.io/github/forks/maurodesouza/profile-readme-generator?" alt="Badge showing the total of project forks"/>
-  </a>
+Beautify your GitHub profile with this amazing tool — create your profile README your way, simply and fast. This is a fork of [maurodesouza/profile-readme-generator](https://github.com/maurodesouza/profile-readme-generator), maintained by Girish Lade, with multilingual (i18n) support and a modernised Next.js codebase.
 
-  <a href="https://github.com/maurodesouza/profile-readme-generator/stargazers" target="_blank">
-    <img src="https://img.shields.io/github/stars/maurodesouza/profile-readme-generator?" alt="Badge showing the total of project stars"/>
-  </a>
+## Features
 
-  <a href="https://github.com/maurodesouza/profile-readme-generator/commits/main" target="_blank">
-    <img src="https://img.shields.io/github/commit-activity/m/maurodesouza/profile-readme-generator?" alt="Badge showing average commit frequency per month"/>
-  </a>
+- **Visual section builder** — drag-and-drop canvas to compose your profile README.
+- **Rich sections** — text, images, social links, tech badges, GitHub stats, activities, music, borders, alignment and more.
+- **Live markdown preview** — see exactly what your profile will look like as you build it.
+- **Multi-language UI** — built-in internationalisation via `next-intl`.
+- **Copy/export** — one-click copy of the generated markdown, ready to paste into your profile README.
+- **State persistence** — your work is saved locally (mobx-persist-store), so you never lose progress.
+- **E2E + unit tested** — Playwright end-to-end tests and Vitest unit tests.
 
-  <a href="https://github.com/maurodesouza/profile-readme-generator/commits/main" target="_blank">
-    <img src="https://img.shields.io/github/last-commit/maurodesouza/profile-readme-generator?" alt="Badge showing when the last commit was made"/>
-  </a>
+## Tech Stack
 
-  <a href="https://github.com/maurodesouza/profile-readme-generator/issues" target="_blank">
-    <img src="https://img.shields.io/github/issues/maurodesouza/profile-readme-generator?" alt="Badge showing the total of project issues"/>
-  </a>
+- **Framework:** Next.js 16 (App Router) + React
+- **Styling:** Tailwind CSS
+- **State:** MobX / mobx-persist-store
+- **i18n:** next-intl
+- **Lint/format:** Biome
+- **Testing:** Vitest, Playwright
+- **Markdown pipeline:** remark / rehype (unified), prismjs syntax highlighting
 
-  <a href="https://github.com/maurodesouza/profile-readme-generator/pulls" target="_blank">
-    <img src="https://img.shields.io/github/issues-pr/maurodesouza/profile-readme-generator?" alt="Badge showing the total of project pull-requests"/>
-  </a>
+## Quick Start
 
-  <a href="https://github.com/maurodesouza/profile-readme-generator/blob/master/LICENSE.md" target="_blank">
-    <img alt="Badge showing project license type" src="https://img.shields.io/github/license/maurodesouza/profile-readme-generator?color=f85149">
-  </a>
+### Prerequisites
 
+- Node.js 20+
+- npm (or pnpm)
 
-</p>
-
-
-<p align="center">
-  <a href="#dart-about">About</a> &#xa0; | &#xa0;
-  <a href="#rocket-main-technologies">Technologies</a> &#xa0; | &#xa0;
-  <a href="#white_check_mark-requirements">Requirements</a> &#xa0; | &#xa0;
-  <a href="#checkered_flag-starting">Starting</a> &#xa0; | &#xa0;
-  <a href="https://github.com/maurodesouza/profile-readme-generator/blob/main/.github/CONTRIBUTING.md">Contributing</a>
-</p>
-
-## :dart: About ##
-
-Are you tired of manually editing your GitHub profile or missing out on the amazing features you can add to it? 😩 Configuring GitHub actions can also be a hassle, right? Say no more! 💪
-
-**Introducing a tool that lets you beautify your GitHub profile with a customized README, easily and in no time!** ✨ You can include whatever content you want, wherever you want it (*within the limitations of markdown, of course*). 📝
-
-**With this amazing tool, creating your own README has never been so simple and fast.** ⚡ You can save time and focus on what really matters - showcasing your skills and projects. 🚀
-
-**Don't miss out on the opportunity to enhance your GitHub profile.** Give it a try and see for yourself how easy and convenient it is! 😉
-
-<p align="center">
-<i>Loved the tool? Please consider <a href="https://www.paypal.com/donate/?hosted_button_id=FR3A2DGVYKGJS">donating 💸</a> to support its continuous<br/> improvement and development!</i>
-</p>
-
-<div align="center">
-  <i>
-  <a href="https://trendshift.io/repositories/11023?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-11023" target="_blank" rel="noopener noreferrer">       <img src="https://trendshift.io/api/badge/repositories/11023" alt="maurodesouza%2Fprofile-readme-generator | Trendshift" width="250" height="55"/>
-  </a>
-  </i>
-<i>
-  <a href="https://trendshift.io/repositories/11023?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-11023" target="_blank" rel="noopener noreferrer">      <img src="https://trendshift.io/api/badge/trendshift/repositories/11023/daily?language=TypeScript" alt="maurodesouza%2Fprofile-readme-generator | Trendshift" width="250" height="55"/>
-  </a>
-</i>
-  <a href="https://trendshift.io/repositories/11023?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-11023" target="_blank" rel="noopener noreferrer">       <img src="https://trendshift.io/api/badge/trendshift/repositories/11023/daily" alt="maurodesouza%2Fprofile-readme-generator | Trendshift" width="250" height="55"/>
-  </a>
-</div>
-
-&#xa0;
-
-https://user-images.githubusercontent.com/54520907/173442002-dafc63ea-321f-4ce2-b349-be490b3a00ff.mp4
-
-## :rocket: Main Technologies ##
-
-<a href="https://nextjs.org">
-  <img width="50" title="NextJs" alt="Next Logo" src="https://raw.githubusercontent.com/maurodesouza/maurodesouza/master/assets/next-logo.svg">
-</a> &#xa0; &#xa0;
-
-<a href="https://www.typescriptlang.org">
-  <img width="50" title="Typescript" alt="Typescript Logo" src="https://raw.githubusercontent.com/maurodesouza/maurodesouza/master/assets/typescript-logo.svg">
-</a> &#xa0; &#xa0;
-
-<a href="https://tailwindcss.com">
-  <img width="50" title="Styled Components" alt="Styled Components Logo" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/tailwind/tailwind.png">
-</a> &#xa0; &#xa0;
-
-<a href="https://jestjs.io">
-  <img width="50" title="Jest" alt="Jest Logo" src="https://raw.githubusercontent.com/maurodesouza/maurodesouza/master/assets/jest-logo.svg">
-</a> &#xa0; &#xa0;
-
-<a href="https://biomejs.dev">
-  <img width="50" title="Biome" alt="Biome Logo" src="https://biomejs.dev/img/favicon.svg">
-</a>
-
-###
-
-<details>
-  <summary>See more</summary>
-
-  ###
-
-  * [Shadcn](https://ui.shadcn.com)
-  * [Radix](https://www.radix-ui.com)
-  * [Lucid Icons](https://lucide.dev)
-  * [clsx](https://github.com/lukeed/clsx#readme)
-  * [Tailwind Merge](https://github.com/dcastil/tailwind-merge#readme)
-  * [Tailwind Variants](https://www.tailwind-variants.org)
-  * [Framer Motion](https://framer.com/motion/)
-  * [Prismjs](https://prismjs.com)
-  * [HTML Prettify](https://github.com/Dmc0125/html-prettify#readme)
-  * [React Share](https://github.com/nygardk/react-share)
-  * [React Markdown](https://github.com/remarkjs/react-markdown#readme)
-  * [UUID](https://github.com/uuidjs/uuid#readme)
-
-</details>
-
-## :white_check_mark: Requirements ##
-
-Before starting :checkered_flag:, make sure you have [Git](https://git-scm.com) and [Node](https://nodejs.org/en/) installed on your system. ([nvm](https://github.com/nvm-sh/nvm#node-version-manager---) recommended).
-
-## :checkered_flag: Starting ##
+### Install & run
 
 ```bash
-# Clone this project
-$ git clone https://github.com/maurodesouza/profile-readme-generator
-
-# Access
-$ cd profile-readme-generator
-
-# Install dependencies
-$ yarn
-
-# Run the project
-$ yarn dev
-
-# The server will initialize in the <http://localhost:3000>
+git clone https://github.com/girishlade111/profile-readme-generator.git
+cd profile-readme-generator
+npm install --legacy-peer-deps
+npm run dev
 ```
 
-## :video_game: Scripts
+Open http://localhost:3000.
 
-- `dev`: starts the application at `localhost:3000`;
-- `build`: creates an optimized production build of the application;
-- `start`: starts the application in production mode at localhost:3000 (make sure to run the build first);
-- `test`: runs the tests;
-- `lint`: runs biome check in the /src directory;
-- `format`: runs biome format in the /src directory.
+### Build (static export)
 
-## :memo: License ##
+```bash
+npm run build
+```
 
-This project is licensed under the MIT License. For more details, please refer to the [LICENSE](LICENSE.md) file.
+This produces a static `out/` directory (via `output: 'export'`), deployable to any static host.
 
+### Tests
 
-Made with :heart: by <a href="https://github.com/maurodesouza" target="_blank">Mauro de Souza</a>
+```bash
+npm test            # unit tests (vitest)
+npm run test:e2e    # end-to-end tests (playwright)
+```
 
-&#xa0;
+## Project Structure
 
-<a href="#top">Back to top</a>
+```
+src/
+├── app/[locale]/        # App Router pages with locale segment
+├── components/          # atoms, molecules, organisms, templates
+├── features/            # README section builders (activities, image, music, border, ...)
+├── config/              # general + env config
+├── i18n/                # next-intl locale setup
+├── assets/              # icons, static assets
+└── ...
+public/                  # static files (manifest, assets)
+playwright/              # e2e test fixtures
+```
 
-*Readme created with [Simple Readme](https://marketplace.visualstudio.com/items?itemName=maurodesouza.vscode-simple-readme)*
+## Environment Variables
+
+No required env vars for the default build. Check `src/config/envs` if you extend the app.
+
+## Deployment
+
+The repo is configured for static export (`output: 'export'` in `next.config.js`). The static site in `out/` is deployed to Cloudflare Pages.
+
+## License
+
+MIT — see [LICENSE.md](./LICENSE.md). Original project by [maurodesouza](https://github.com/maurodesouza); fork maintained by Girish Lade.
+
+---
+
+Built by Girish Lade — https://ladestack.in
